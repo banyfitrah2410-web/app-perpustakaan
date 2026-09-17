@@ -1,51 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Tambah Kategori</title>
+@section('title', 'Tambah Kategori')
 
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 40px;
-            max-width: 500px;
-        }
-
-        label {
-            display: block;
-            margin-top: 12px;
-            font-weight: bold;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 6px;
-            margin-top: 4px;
-            box-sizing: border-box;
-        }
-
-        .error {
-            color: #b91c1c;
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .btn {
-            margin-top: 20px;
-            padding: 8px 16px;
-            background: #2563eb;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-
+@section('content')
     <h1>Tambah Kategori</h1>
 
     <p>
@@ -54,62 +11,32 @@
         </a>
     </p>
 
-
-    <form
-        action="{{ route('categories.store') }}"
-        method="POST"
-    >
-
+    <form action="{{ route('categories.store') }}" method="POST">
         @csrf
 
-
-        <label for="nama_kategori">
-            Nama Kategori
-        </label>
-
+        <label for="nama_kategori">Nama Kategori</label>
         <input
             type="text"
             name="nama_kategori"
             id="nama_kategori"
             value="{{ old('nama_kategori') }}"
         >
-
         @error('nama_kategori')
-
-            <div class="error">
-                {{ $message }}
-            </div>
-
+            <div class="error">{{ $message }}</div>
         @enderror
 
-
-        <label for="deskripsi">
-            Deskripsi (opsional)
-        </label>
-
+        <label for="deskripsi">Deskripsi (opsional)</label>
         <textarea
             name="deskripsi"
             id="deskripsi"
             rows="4"
         >{{ old('deskripsi') }}</textarea>
-
         @error('deskripsi')
-
-            <div class="error">
-                {{ $message }}
-            </div>
-
+            <div class="error">{{ $message }}</div>
         @enderror
 
-
-        <button
-            type="submit"
-            class="btn"
-        >
+        <button type="submit" class="btn">
             Simpan
         </button>
-
     </form>
-
-</body>
-</html>
+@endsection
