@@ -1,49 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Tambah Buku</title>
+@extends('layouts.app')
 
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 40px;
-            max-width: 500px;
-        }
+@section('title', 'Tambah Buku')
 
-        label {
-            display: block;
-            margin-top: 12px;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 6px;
-            margin-top: 4px;
-            box-sizing: border-box;
-        }
-
-        .error {
-            color: #b91c1c;
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .btn {
-            margin-top: 20px;
-            padding: 8px 16px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-
+@section('content')
     <h1>Tambah Buku</h1>
 
     <p>
@@ -53,7 +12,6 @@
     </p>
 
     <form action="{{ route('books.store') }}" method="POST">
-
         @csrf
 
         <label for="judul">Judul</label>
@@ -63,11 +21,9 @@
             id="judul"
             value="{{ old('judul') }}"
         >
-
         @error('judul')
             <div class="error">{{ $message }}</div>
         @enderror
-
 
         <label for="penulis">Penulis</label>
         <input
@@ -76,11 +32,9 @@
             id="penulis"
             value="{{ old('penulis') }}"
         >
-
         @error('penulis')
             <div class="error">{{ $message }}</div>
         @enderror
-
 
         <label for="penerbit">Penerbit</label>
         <input
@@ -89,11 +43,9 @@
             id="penerbit"
             value="{{ old('penerbit') }}"
         >
-
         @error('penerbit')
             <div class="error">{{ $message }}</div>
         @enderror
-
 
         <label for="tahun_terbit">Tahun Terbit</label>
         <input
@@ -102,11 +54,9 @@
             id="tahun_terbit"
             value="{{ old('tahun_terbit') }}"
         >
-
         @error('tahun_terbit')
             <div class="error">{{ $message }}</div>
         @enderror
-
 
         <label for="isbn">ISBN (opsional)</label>
         <input
@@ -115,11 +65,9 @@
             id="isbn"
             value="{{ old('isbn') }}"
         >
-
         @error('isbn')
             <div class="error">{{ $message }}</div>
         @enderror
-
 
         <label for="stok">Stok</label>
         <input
@@ -128,43 +76,30 @@
             id="stok"
             value="{{ old('stok', 1) }}"
         >
-
         @error('stok')
             <div class="error">{{ $message }}</div>
         @enderror
 
-
         <label for="category_id">Kategori</label>
-
         <select name="category_id" id="category_id">
-
             <option value="">
                 -- Pilih Kategori --
             </option>
-
             @foreach ($categories as $category)
-
                 <option
                     value="{{ $category['id'] }}"
                     @selected(old('category_id') == $category['id'])
                 >
                     {{ $category['nama_kategori'] }}
                 </option>
-
             @endforeach
-
         </select>
-
         @error('category_id')
             <div class="error">{{ $message }}</div>
         @enderror
 
-
         <button type="submit" class="btn">
             Simpan
         </button>
-
     </form>
-
-</body>
-</html>
+@endsection
