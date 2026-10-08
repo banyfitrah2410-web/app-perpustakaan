@@ -14,4 +14,9 @@ class Member extends Model
         'alamat',
         'status',
     ];
+
+    public function loans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Loan::class);
+    }
 }
