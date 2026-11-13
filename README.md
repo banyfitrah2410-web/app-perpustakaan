@@ -1,66 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Sistem Perpustakaan Digital Kampus
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web manajemen perpustakaan modern berbasis **Laravel 12**, dilengkapi dengan autentikasi berbasis role (Admin & Petugas), relasi database transaksi peminjaman multi-buku, dedicated REST API Resource, dan konsumsi API internal via Laravel HTTP Client.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Autentikasi & Otorisasi:**
+  - Login & Logout dengan proteksi session.
+  - Multi-role: `admin` (akses penuh termasuk CRUD kategori) dan `petugas` (manajemen buku, anggota, dan sirkulasi peminjaman).
+  - Profil pengguna & fitur ganti password mandiri.
+- **Manajemen Data (CRUD):**
+  - Kategori Buku (khusus Admin).
+  - Data Buku lengkap dengan relasi kategori, stok, ISBN, dan pagination.
+  - Data Anggota Perpustakaan dengan status aktif/nonaktif.
+- **Sirkulasi Peminjaman (Eloquent Relationships):**
+  - Transaksi peminjaman multi-buku dalam satu transaksi (`Loan` & `LoanItem`).
+  - Alur pengembalian buku dengan pencatatan tanggal dikembalikan otomatis.
+- **REST API & API Resource:**
+  - Dedicated API Controller di `app/Http/Controllers/Api/` dengan format response seragam via `JsonResource`.
+  - Endpoint lengkap untuk `books`, `members`, `loans`, dan `stats`.
+- **Konsumsi API Internal (BFF Pattern):**
+  - **Dashboard:** Menampilkan kartu statistik dari `GET /api/stats`.
+  - **Laporan:** Menampilkan data transaksi peminjaman dari `GET /api/loans`.
+  - Dilengkapi penanganan `ConnectionException` untuk ketahanan saat server API offline.
+- **Seeder & Factory Realistis:**
+  - Menggunakan Faker locale Indonesia (`id_ID`) dengan kurasi judul buku dan penerbit nasional.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 💻 Prasyarat Sistem
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **PHP:** >= 8.2
+- **Composer:** >= 2.x
+- **Database:** MySQL / MariaDB (via Laragon / XAMPP)
+- **Ekstensi PHP:** PDO, OpenSSL, Mbstring, Tokenizer, XML, Ctype, JSON, cURL
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Panduan Instalasi & Menjalankan Project
 
-## Laravel Sponsors
+### 1. Clone Repository
+```bash
+git clone https://github.com/banyfarhan/app-perpustakaan.git
+cd app-perpustakaan
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Install Dependencies
+```bash
+composer install
+```
 
-### Premium Partners
+### 3. Konfigurasi Environment (`.env`)
+Salin file konfigurasi `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Generate application key:
+```bash
+php artisan key:generate
+```
 
-## Contributing
+Pastikan pengaturan database di `.env` sudah sesuai:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_perpustakaan
+DB_USERNAME=root
+DB_PASSWORD=
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Base URL instance kedua khusus panggilan API internal
+INTERNAL_API_URL=http://127.0.0.1:8011
+APP_FAKER_LOCALE=id_ID
+```
 
-## Code of Conduct
+### 4. Migrasi & Seeding Database
+Jalankan migrasi tabel dan seeding data dummy realistis:
+```bash
+php artisan migrate:fresh --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Menjalankan Server Aplikasi (Wajib 2 Terminal)
+Karena `php artisan serve` (PHP built-in server) bersifat *single-threaded*, konsumsi API internal memerlukan dua terminal berjalan bersamaan:
 
-## Security Vulnerabilities
+- **Terminal 1 – Web Server Utama (Aplikasi Browser):**
+  ```bash
+  php artisan serve --port=8000
+  ```
+  Akses aplikasi web di: `http://127.0.0.1:8000`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Terminal 2 – Internal API Server (Endpoint Service):**
+  ```bash
+  php artisan serve --port=8011
+  ```
+  Melayani request internal dari `DashboardController` dan `LoanController@report`.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🔑 Akun Bawaan (Default Seeders)
+
+| Role | Nama | Email | Password |
+|---|---|---|---|
+| **Admin** | Bambang Sutrisno | `admin@pens.ac.id` | `password` |
+| **Petugas 1** | Siti Rahmawati | `petugas1@pens.ac.id` | `password` |
+| **Petugas 2** | Ahmad Fauzi | `petugas2@pens.ac.id` | `password` |
+
+---
+
+## 📖 Dokumentasi Tambahan
+
+- **[Dokumentasi Lengkap REST API (API.md)](./API.md):** Berisi daftar 11 endpoint API, contoh request, dan respon JSON aktual (status 200, 201, 404, 422).
+- **[Panduan Skenario Demo UAS (DEMO.md)](./DEMO.md):** Urutan langkah lengkap untuk simulasi dan demonstrasi fitur aplikasi.
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dikembangkan untuk kebutuhan akademik praktikum Web Framework Politeknik Elektronika Negeri Surabaya (PENS).
